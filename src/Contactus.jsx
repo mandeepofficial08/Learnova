@@ -30,7 +30,10 @@ function Contactus() {
   };
 
   return (
-    <div id="contact" className="contact-page">
+   <div
+  id="contact"
+  className={`contact-page ${showContact ? "show" : ""}`}
+>
 
       {/* Header */}
       <section className="contact-header">

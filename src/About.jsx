@@ -2,7 +2,10 @@ import "./About.css";
 
 function About() {
   return (
-    <div id="about" className="about-page">
+    <div
+  id="about"
+  className={`about-page ${showAbout ? "show" : ""}`}
+>
 
       {/* Hero */}
       <section className="about-hero">
