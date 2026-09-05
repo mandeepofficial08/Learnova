@@ -12,7 +12,7 @@ function Footer() {
   };
 
   return (
-    <footer className={`footer ${showFooter ? "show" : ""}`}>
+    <footer className="footer">
 
       <div className="footer-top">
         <span>Keep learning</span>
