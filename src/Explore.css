@@ -1,0 +1,1099 @@
+
+.explore-page {
+  min-height: 100vh;
+  padding: 115px 7% 20px;
+  background: #f5eee4;
+  color: #292421;
+  overflow: hidden;
+}
+
+
+/* =========================================
+   ENTRANCE ANIMATION
+========================================= */
+
+.explore-heading,
+.explore-intro,
+.study-cards,
+.explore-search-area,
+.topic-section,
+.resource-section {
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+.explore-page.show .explore-heading {
+  animation: exploreUp 0.75s ease forwards;
+}
+
+.explore-page.show .explore-intro {
+  animation: exploreUp 0.75s 0.1s ease forwards;
+}
+
+.explore-page.show .study-cards {
+  animation: exploreUp 0.75s 0.18s ease forwards;
+}
+
+.explore-page.show .explore-search-area {
+  animation: exploreUp 0.75s 0.28s ease forwards;
+}
+
+.explore-page.show .topic-section {
+  animation: exploreUp 0.75s 0.38s ease forwards;
+}
+
+.explore-page.show .resource-section {
+  animation: exploreUp 0.75s 0.48s ease forwards;
+}
+
+@keyframes exploreUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+/* =========================================
+   HEADER
+========================================= */
+
+.explore-header {
+  position: relative;
+  max-width: 1150px;
+  min-height: 260px;
+  margin: 0 auto;
+}
+
+.explore-heading {
+  position: relative;
+  z-index: 2;
+}
+
+.explore-label,
+.resource-label,
+.topic-heading span {
+  display: block;
+  margin-bottom: 12px;
+  font-size: 10px;
+  letter-spacing: 2.5px;
+  font-weight: 700;
+  color: #897a6e;
+}
+
+.explore-heading h1 {
+  margin: 0;
+
+  font-family: Georgia, "Times New Roman", serif;
+
+  font-size: clamp(42px, 5vw, 62px);
+  line-height: 0.96;
+
+  letter-spacing: -2.5px;
+
+  font-weight: 600;
+
+  color: #292421;
+}
+
+.explore-intro {
+  max-width: 420px;
+
+  margin: 20px 0 0;
+
+  font-size: 13px;
+  line-height: 1.6;
+
+  color: #81756c;
+}
+
+.explore-mobile-intro {
+  display: none;
+}
+
+
+/* =========================================
+   STUDY CARDS
+========================================= */
+
+.study-cards {
+  position: absolute;
+
+  top: 0;
+  right: 5%;
+
+  width: 300px;
+  height: 220px;
+
+  perspective: 1000px;
+
+  z-index: 10;
+}
+
+
+/* =========================================
+   CARD BASE
+========================================= */
+
+.study-card {
+  position: absolute;
+
+  width: 100px;
+  height: 125px;
+
+  padding: 14px 12px;
+
+  box-sizing: border-box;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  background: #f6eee3;
+
+  border: 1px solid #d8cbbc;
+
+  box-shadow: 0 12px 25px rgba(45, 32, 24, 0.08);
+
+  cursor: pointer;
+
+  transform-style: preserve-3d;
+
+  transform-origin: center center;
+
+  will-change: transform;
+}
+
+
+/* =========================================
+   ORIGINAL POSITIONS
+========================================= */
+
+.study-card-html {
+  left: 0;
+  top: 25px;
+
+  transform: rotate(-7deg);
+
+  z-index: 1;
+}
+
+.study-card-logic {
+  left: 95px;
+  top: 75px;
+
+  transform: rotate(5deg);
+
+  z-index: 3;
+}
+
+.study-card-sql {
+  right: 0;
+  top: 20px;
+
+  transform: rotate(8deg);
+
+  z-index: 2;
+}
+
+
+/* =========================================
+   CARD TEXT
+========================================= */
+
+.study-card small {
+  font-size: 6px;
+
+  letter-spacing: 1.2px;
+
+  color: #b06e45;
+}
+
+.study-card strong {
+  font-family: Georgia, "Times New Roman", serif;
+
+  font-size: 21px;
+
+  font-weight: 600;
+
+  color: #4a4039;
+}
+
+
+/* =========================================
+   ⭐ CONTINUOUS Y-AXIS FLIP ⭐
+
+   The important part is:
+
+   animation-iteration-count: infinite;
+
+   So while the mouse stays over the cards,
+   ALL THREE continuously flip around Y.
+========================================= */
+
+.study-cards:hover .study-card-html {
+  animation: flipHTML 0.6s linear infinite;
+}
+
+.study-cards:hover .study-card-logic {
+  animation: flipLogic 0.6s linear infinite;
+}
+
+.study-cards:hover .study-card-sql {
+  animation: flipSQL 0.6s linear infinite;
+}
+
+
+/* =========================================
+   HTML
+========================================= */
+
+@keyframes flipHTML {
+  from {
+    transform: rotate(-7deg) rotateY(0deg);
+  }
+
+  to {
+    transform: rotate(-7deg) rotateY(360deg);
+  }
+}
+
+
+/* =========================================
+   LOGIC
+========================================= */
+
+@keyframes flipLogic {
+  from {
+    transform: rotate(5deg) rotateY(0deg);
+  }
+
+  to {
+    transform: rotate(5deg) rotateY(360deg);
+  }
+}
+
+
+/* =========================================
+   SQL
+========================================= */
+
+@keyframes flipSQL {
+  from {
+    transform: rotate(8deg) rotateY(0deg);
+  }
+
+  to {
+    transform: rotate(8deg) rotateY(360deg);
+  }
+}
+
+
+/* =========================================
+   SEARCH
+========================================= */
+
+.explore-search-area {
+  position: relative;
+
+  width: min(100%, 1150px);
+
+  margin: 0 auto 30px;
+
+  z-index: 20;
+}
+
+.explore-search {
+  position: relative;
+
+  width: 100%;
+  height: 42px;
+
+  border-bottom: 1px solid #ddd1c5;
+
+  transition: border-color 0.25s ease;
+}
+
+.explore-search:hover,
+.explore-search.search-open {
+  border-bottom-color: #a56b3f;
+}
+
+.explore-search input {
+  width: 100%;
+  height: 100%;
+
+  padding: 0 45px 0 0;
+
+  box-sizing: border-box;
+
+  border: none;
+  outline: none;
+
+  background: transparent;
+
+  font-family: inherit;
+
+  font-size: 13px;
+
+  color: #292421;
+}
+
+.explore-search input::placeholder {
+  color: #9b9087;
+}
+
+.search-icon {
+  position: absolute;
+
+  right: 5px;
+  top: 50%;
+
+  transform: translateY(-50%);
+
+  font-size: 19px;
+
+  color: #9b9087;
+
+  pointer-events: none;
+}
+
+
+/* =========================================
+   COURSE RESULTS
+========================================= */
+
+.course-results {
+  position: absolute;
+
+  left: 0;
+  right: 0;
+  top: 50px;
+
+  max-height: 330px;
+
+  overflow-y: auto;
+
+  padding: 6px;
+
+  box-sizing: border-box;
+
+  background: #f8f1e8;
+
+  border: 1px solid #d9cdbf;
+
+  box-shadow: 0 15px 35px rgba(45, 32, 24, 0.12);
+
+  animation: searchDrop 0.2s ease;
+}
+
+@keyframes searchDrop {
+  from {
+    opacity: 0;
+    transform: translateY(-7px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.course-results-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.course-result {
+  width: 100%;
+  min-height: 40px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 9px 12px;
+
+  box-sizing: border-box;
+
+  border: none;
+  border-bottom: 1px solid #e3d8cc;
+
+  background: transparent;
+
+  color: #4c433c;
+
+  font-family: inherit;
+  font-size: 12px;
+
+  text-align: left;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    padding-left 0.2s ease;
+}
+
+.course-result:last-child {
+  border-bottom: none;
+}
+
+.course-result:hover {
+  background: #eee3d7;
+
+  padding-left: 17px;
+}
+
+.course-result-arrow {
+  margin-left: 15px;
+
+  color: #a56b3f;
+
+  transition: transform 0.2s ease;
+}
+
+.course-result:hover .course-result-arrow {
+  transform: translateX(4px);
+}
+
+
+/* =========================================
+   SHOW ALL
+========================================= */
+
+.show-all-btn {
+  width: 100%;
+
+  margin-top: 5px;
+
+  padding: 11px 12px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  border: none;
+
+  border-top: 1px solid #d9cdbf;
+
+  background: transparent;
+
+  color: #a56b3f;
+
+  font-family: inherit;
+
+  font-size: 11px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    padding-left 0.2s ease;
+}
+
+.show-all-btn:hover {
+  background: #eee3d7;
+
+  padding-left: 17px;
+}
+
+.no-course-result {
+  padding: 20px;
+
+  text-align: center;
+
+  color: #8b7d72;
+
+  font-size: 12px;
+}
+
+
+/* =========================================
+   TOPICS
+========================================= */
+
+.topic-section {
+  max-width: 1150px;
+
+  margin: 0 auto 50px;
+
+  border-bottom: 1px solid #ddd1c5;
+
+  padding-bottom: 9px;
+}
+
+.topic-heading {
+  margin-bottom: 3px;
+}
+
+.topic-heading span {
+  margin-bottom: 0;
+
+  font-size: 9px;
+}
+
+.topic-list {
+  display: flex;
+
+  align-items: center;
+
+  flex-wrap: wrap;
+}
+
+.topic-wrapper {
+  display: flex;
+
+  align-items: center;
+}
+
+.topic-btn {
+  padding: 6px 8px;
+
+  border: none;
+
+  background: transparent;
+
+  color: #71665d;
+
+  font-family: inherit;
+
+  font-size: 11px;
+
+  cursor: pointer;
+
+  transition:
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.topic-btn:hover {
+  color: #292421;
+
+  transform: translateY(-1px);
+}
+
+.topic-btn.active {
+  color: #292421;
+
+  font-weight: 600;
+
+  border-bottom: 1px solid #a56b3f;
+}
+
+.topic-dot {
+  color: #a99b90;
+
+  font-size: 13px;
+}
+
+
+/* =========================================
+   RESOURCE SECTION
+========================================= */
+
+.resource-section {
+  max-width: 1150px;
+
+  margin: 0 auto;
+
+  display: grid;
+
+  grid-template-columns: 230px 1fr;
+
+  gap: 35px;
+}
+
+.resource-topic {
+  padding-top: 5px;
+}
+
+.resource-label {
+  font-size: 9px;
+}
+
+.resource-topic h2 {
+  margin: 0;
+
+  font-family: Georgia, "Times New Roman", serif;
+
+  font-size: 31px;
+
+  line-height: 0.95;
+
+  letter-spacing: -1px;
+
+  font-weight: 600;
+}
+
+.resource-topic p {
+  margin-top: 10px;
+
+  font-size: 12px;
+
+  color: #81756c;
+}
+
+
+/* =========================================
+   RESOURCE LIST
+========================================= */
+
+.resource-list {
+  display: flex;
+
+  flex-direction: column;
+}
+
+.resource-item {
+  width: 100%;
+
+  min-height: 78px;
+
+  display: grid;
+
+  grid-template-columns: 35px 35px 1fr auto;
+
+  align-items: start;
+
+  gap: 10px;
+
+  padding: 14px 12px;
+
+  box-sizing: border-box;
+
+  border: none;
+
+  border-bottom: 1px solid #ddd1c5;
+
+  background: transparent;
+
+  color: #292421;
+
+  font-family: inherit;
+
+  text-align: left;
+
+  cursor: pointer;
+
+  opacity: 0;
+
+  transform: translateY(15px);
+
+  animation:
+    resourceAppear
+    0.55s
+    var(--resource-delay)
+    ease forwards;
+
+  transition:
+    background 0.25s ease,
+    padding-left 0.25s ease;
+}
+
+@keyframes resourceAppear {
+  to {
+    opacity: 1;
+
+    transform: translateY(0);
+  }
+}
+
+.resource-item:hover {
+  background: rgba(236, 225, 212, 0.55);
+
+  padding-left: 18px;
+}
+
+.resource-item.selected {
+  background: #eee2d4;
+}
+
+.resource-number {
+  padding-top: 2px;
+
+  font-size: 9px;
+
+  color: #b06e45;
+}
+
+.resource-icon {
+  padding-top: 1px;
+
+  color: #93867b;
+
+  font-size: 16px;
+}
+
+.resource-main {
+  min-width: 0;
+}
+
+.resource-type {
+  font-size: 8px;
+
+  letter-spacing: 1.7px;
+
+  color: #897b70;
+}
+
+.resource-main h3 {
+  margin: 3px 0;
+
+  font-family: Georgia, "Times New Roman", serif;
+
+  font-size: 16px;
+
+  font-weight: 600;
+}
+
+.resource-main p {
+  margin: 0;
+
+  max-width: 650px;
+
+  font-size: 10px;
+
+  line-height: 1.5;
+
+  color: #81756c;
+}
+
+
+/* =========================================
+   RESOURCE EXTRA
+========================================= */
+
+.resource-extra {
+  max-height: 0;
+
+  overflow: hidden;
+
+  opacity: 0;
+
+  margin-top: 0;
+
+  transition:
+    max-height 0.3s ease,
+    opacity 0.3s ease,
+    margin 0.3s ease;
+}
+
+.resource-item.selected .resource-extra {
+  max-height: 25px;
+
+  opacity: 1;
+
+  margin-top: 6px;
+}
+
+.resource-extra span {
+  font-size: 9px;
+
+  color: #a56b3f;
+}
+
+
+/* =========================================
+   RESOURCE ACTION
+========================================= */
+
+.resource-action {
+  display: flex;
+
+  align-items: center;
+
+  gap: 8px;
+
+  padding-top: 4px;
+
+  color: #a56b3f;
+
+  font-size: 9px;
+}
+
+.resource-action strong {
+  font-size: 14px;
+
+  font-weight: 400;
+
+  transition: transform 0.2s ease;
+}
+
+.resource-item:hover .resource-action strong {
+  transform: translateX(4px);
+}
+
+
+/* =========================================
+   TABLET
+========================================= */
+
+@media (max-width: 900px) {
+  .explore-page {
+    padding-left: 5%;
+    padding-right: 5%;
+  }
+
+  .study-cards {
+    right: 0;
+
+    transform: scale(0.85);
+
+    transform-origin: top right;
+  }
+
+  .explore-heading h1 {
+    font-size: 54px;
+  }
+
+  .resource-section {
+    grid-template-columns: 190px 1fr;
+  }
+}
+
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 700px) {
+  .explore-page {
+    padding: 95px 20px 70px;
+  }
+
+  .explore-header {
+    min-height: auto;
+  }
+
+  .explore-heading h1 {
+    font-size: clamp(38px, 10vw, 52px);
+
+    letter-spacing: -2px;
+  }
+
+  .explore-heading h1 br {
+    display: none;
+  }
+
+  .explore-intro {
+    display: none;
+  }
+
+  .explore-mobile-intro {
+    display: block;
+
+    max-width: 340px;
+
+    margin-top: 15px;
+
+    font-size: 12px;
+
+    line-height: 1.6;
+
+    color: #81756c;
+  }
+
+
+  /* =====================================
+     MOBILE CARDS
+  ===================================== */
+
+  .study-cards {
+    position: relative;
+
+    top: auto;
+    right: auto;
+
+    width: 100%;
+
+    height: 145px;
+
+    margin: 25px auto 10px;
+
+    transform: none;
+
+    overflow: visible;
+  }
+
+  .study-card {
+    width: 82px;
+
+    height: 105px;
+
+    padding: 11px 9px;
+  }
+
+  .study-card strong {
+    font-size: 18px;
+  }
+
+  .study-card-html {
+    left: 3%;
+
+    top: 10px;
+
+    transform: rotate(-7deg);
+  }
+
+  .study-card-logic {
+    left: 50%;
+
+    top: 32px;
+
+    margin-left: -41px;
+
+    transform: rotate(5deg);
+  }
+
+  .study-card-sql {
+    right: 3%;
+
+    top: 8px;
+
+    transform: rotate(8deg);
+  }
+
+
+  /* =====================================
+     MOBILE TOPICS
+  ===================================== */
+
+  .topic-section {
+    margin-bottom: 35px;
+  }
+
+  .topic-list {
+    row-gap: 3px;
+  }
+
+  .topic-btn {
+    padding: 6px;
+
+    font-size: 10px;
+  }
+
+  .topic-dot {
+    display: none;
+  }
+
+
+  /* =====================================
+     MOBILE RESOURCES
+  ===================================== */
+
+  .resource-section {
+    display: block;
+  }
+
+  .resource-topic {
+    margin-bottom: 25px;
+  }
+
+  .resource-topic h2 {
+    font-size: 30px;
+  }
+
+  .resource-item {
+    grid-template-columns: 25px 30px 1fr;
+
+    gap: 8px;
+
+    padding: 13px 8px;
+  }
+
+  .resource-action {
+    display: none;
+  }
+
+  .resource-main h3 {
+    font-size: 15px;
+  }
+
+  .resource-main p {
+    font-size: 10px;
+  }
+}
+
+
+/* =========================================
+   SMALL MOBILE
+========================================= */
+
+@media (max-width: 430px) {
+  .explore-page {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+
+  .explore-heading h1 {
+    font-size: 36px;
+
+    letter-spacing: -1.7px;
+  }
+
+  .study-cards {
+    height: 130px;
+  }
+
+  .study-card {
+    width: 72px;
+
+    height: 95px;
+  }
+
+  .study-card strong {
+    font-size: 16px;
+  }
+
+  .study-card-html {
+    left: 2%;
+  }
+
+  .study-card-logic {
+    margin-left: -36px;
+  }
+
+  .study-card-sql {
+    right: 2%;
+  }
+
+  .resource-main h3 {
+    font-size: 14px;
+  }
+
+  .resource-main p {
+    font-size: 9px;
+  }
+}
+
+
+/* =========================================
+   REDUCED MOTION
+========================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .study-cards:hover .study-card-html,
+  .study-cards:hover .study-card-logic,
+  .study-cards:hover .study-card-sql {
+    animation: none;
+  }
+
+  .explore-heading,
+  .explore-intro,
+  .study-cards,
+  .explore-search-area,
+  .topic-section,
+  .resource-section {
+    opacity: 1;
+
+    transform: none;
+  }
+}

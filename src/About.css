@@ -1,0 +1,299 @@
+/* =================================
+   ABOUT PAGE
+================================= */
+
+.about-page {
+  min-height: 100vh;
+  padding-top: 20px;
+  background: #f5eee4;
+  color: #292421;
+}
+
+
+/* =================================
+   HERO
+================================= */
+
+.about-hero {
+  max-width: 950px;
+  margin: 0 auto;
+  padding: 110px 30px 100px;
+  text-align: center;
+}
+
+.about-label {
+  margin-bottom: 20px;
+
+  color: #a68060;
+
+  font-size: 12px;
+  font-weight: 700;
+
+  letter-spacing: 2px;
+}
+
+.about-hero h1 {
+  margin: 0;
+
+  font-size: 64px;
+  line-height: 1.05;
+
+  font-weight: 600;
+
+  letter-spacing: -2px;
+}
+
+.about-hero h1 span {
+  color: #71665d;
+}
+
+.about-intro {
+  max-width: 650px;
+
+  margin: 30px auto 0;
+
+  color: #71665d;
+
+  font-size: 17px;
+  line-height: 1.8;
+}
+
+
+/* =================================
+   GENERAL SECTION
+================================= */
+
+.about-section {
+  max-width: 1100px;
+
+  margin: 0 auto;
+
+  padding: 80px 30px;
+
+  border-top: 1px solid rgba(166, 128, 96, 0.18);
+
+  display: grid;
+
+  grid-template-columns: 35% 65%;
+
+  gap: 30px;
+}
+
+
+/* =================================
+   SECTION TITLE
+================================= */
+
+.about-section-title {
+  display: flex;
+
+  align-items: flex-start;
+
+  gap: 18px;
+}
+
+.about-section-title span {
+  color: #a68060;
+
+  font-size: 13px;
+
+  font-weight: 600;
+}
+
+.about-section-title h2 {
+  margin: 0;
+
+  font-size: 28px;
+
+  font-weight: 600;
+}
+
+
+/* =================================
+   SECTION CONTENT
+================================= */
+
+.about-section-content {
+  max-width: 620px;
+}
+
+.about-section-content p {
+  margin: 0 0 22px;
+
+  color: #71665d;
+
+  font-size: 16px;
+
+  line-height: 1.8;
+}
+
+
+/* =================================
+   ABOUT CARDS
+================================= */
+
+.about-cards {
+  display: grid;
+
+  grid-template-columns: repeat(3, 1fr);
+
+  gap: 18px;
+}
+
+.about-card {
+  min-height: 210px;
+
+  padding: 28px;
+
+  background: #fffbf5;
+
+  border: 1px solid rgba(166, 128, 96, 0.14);
+
+  border-radius: 20px;
+
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.about-card:hover {
+  transform: translateY(-5px);
+
+  box-shadow:
+    0 12px 25px rgba(45, 32, 24, 0.08);
+}
+
+.about-card span {
+  color: #a68060;
+
+  font-size: 12px;
+
+  font-weight: 600;
+}
+
+.about-card h3 {
+  margin: 35px 0 12px;
+
+  font-size: 21px;
+
+  font-weight: 600;
+}
+
+.about-card p {
+  margin: 0;
+
+  color: #71665d;
+
+  font-size: 14px;
+
+  line-height: 1.7;
+}
+
+
+/* =================================
+   MISSION
+================================= */
+
+.about-mission {
+  margin-top: 30px;
+
+  padding: 100px 30px;
+
+  background: #292421;
+
+  color: white;
+
+  text-align: center;
+}
+
+.about-mission .about-label {
+  color: #c6a98c;
+}
+
+.about-mission h2 {
+  margin: 0;
+
+  font-size: 44px;
+
+  line-height: 1.2;
+
+  font-weight: 500;
+
+  letter-spacing: -1px;
+}
+
+.about-mission > p:last-child {
+  max-width: 600px;
+
+  margin: 25px auto 0;
+
+  color: #c9c0b8;
+
+  font-size: 15px;
+
+  line-height: 1.8;
+}
+
+
+/* =================================
+   TABLET
+================================= */
+
+@media (max-width: 850px) {
+
+  .about-hero {
+    padding: 80px 25px;
+  }
+
+  .about-hero h1 {
+    font-size: 48px;
+  }
+
+  .about-section {
+    grid-template-columns: 1fr;
+
+    padding: 60px 25px;
+  }
+
+  .about-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .about-mission h2 {
+    font-size: 36px;
+  }
+}
+
+
+/* =================================
+   MOBILE
+================================= */
+
+@media (max-width: 500px) {
+
+  .about-page {
+    padding-top: 70px;
+  }
+
+  .about-hero h1 {
+    font-size: 38px;
+
+    letter-spacing: -1px;
+  }
+
+  .about-intro {
+    font-size: 15px;
+  }
+
+  .about-section-title h2 {
+    font-size: 24px;
+  }
+
+  .about-mission {
+    padding: 75px 25px;
+  }
+
+  .about-mission h2 {
+    font-size: 30px;
+  }
+}
