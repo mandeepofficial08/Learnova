@@ -1,6 +1,13 @@
 import { useEffect, useRef, useState } from "react";
 import "./Explore.css";
-
+import {
+  Play,
+  NotebookPen,
+  CircleHelp,
+  ClipboardCheck,
+  Puzzle
+ 
+} from "lucide-react"; 
 function Explore() {
   const [selectedTopic, setSelectedTopic] = useState("Web Development");
   const [selectedResource, setSelectedResource] = useState(0);
@@ -87,7 +94,7 @@ function Explore() {
       description:
         "Learn visually through short explanations you can pause, replay and come back to later.",
       action: "Watch",
-      icon: "▷",
+      icon: <Play />,
     },
     {
       number: "02",
@@ -96,7 +103,7 @@ function Explore() {
       description:
         "Keep the important concepts close. Read through them whenever you need a quick refresher.",
       action: "Read",
-      icon: "▱",
+      icon: <NotebookPen />,
     },
     {
       number: "03",
@@ -105,7 +112,7 @@ function Explore() {
       description:
         "See whether you can actually use what you just learned by solving practical questions.",
       action: "Practice",
-      icon: "⌁",
+      icon: <ClipboardCheck />,
     },
     {
       number: "04",
@@ -114,7 +121,7 @@ function Explore() {
       description:
         "Find out what you remember before moving ahead with a short knowledge check.",
       action: "Test",
-      icon: "⌕",
+      icon: <CircleHelp />,
     },
     {
       number: "05",
@@ -123,17 +130,9 @@ function Explore() {
       description:
         "Problems that make you stop and think a little harder about what you have learned.",
       action: "Solve",
-      icon: "♧",
+      icon: <Puzzle />,
     },
-    {
-      number: "06",
-      type: "PLAY",
-      title: "Learning games",
-      description:
-        "Practice without making it feel like another assignment. Learn through small challenges.",
-      action: "Play",
-      icon: "⌘",
-    },
+  
   ];
 
   /* =================================

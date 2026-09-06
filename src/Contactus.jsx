@@ -1,13 +1,37 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./Contactus.css";
 
 function Contactus() {
+  const [showContact, setShowContact] = useState(false);
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     subject: "",
     message: "",
   });
+
+  useEffect(() => {
+    const section = document.getElementById("contact");
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setShowContact(true);
+          observer.disconnect();
+        }
+      },
+      {
+        threshold: 0.15,
+      }
+    );
+
+    if (section) {
+      observer.observe(section);
+    }
+
+    return () => observer.disconnect();
+  }, []);
 
   const handleChange = (e) => {
     setFormData({
@@ -35,14 +59,16 @@ function Contactus() {
       {/* Header */}
       <section className="contact-header">
 
-        <p className="contact-label">GET IN TOUCH</p>
+        <p className={`contact-label ${showContact ? "show" : ""}`}>
+          GET IN TOUCH
+        </p>
 
-        <h1>
+        <h1 className={showContact ? "show" : ""}>
           We'd love to
           <span> hear from you.</span>
         </h1>
 
-        <p>
+        <p className={showContact ? "show" : ""}>
           Have a question, suggestion, or need some help?
           Send us a message and we'll get back to you.
         </p>
@@ -56,7 +82,7 @@ function Contactus() {
         {/* Left Side */}
         <div className="contact-info">
 
-          <div className="contact-info-block">
+          <div className={`contact-info-block ${showContact ? "show" : ""}`}>
             <span>01</span>
 
             <h3>Email</h3>
@@ -67,7 +93,7 @@ function Contactus() {
           </div>
 
 
-          <div className="contact-info-block">
+          <div className={`contact-info-block ${showContact ? "show" : ""}`}>
             <span>02</span>
 
             <h3>Need help?</h3>
@@ -79,7 +105,7 @@ function Contactus() {
           </div>
 
 
-          <div className="contact-info-block">
+          <div className={`contact-info-block ${showContact ? "show" : ""}`}>
             <span>03</span>
 
             <h3>Suggestions</h3>
@@ -95,7 +121,7 @@ function Contactus() {
 
         {/* Form */}
         <form
-          className="contact-form"
+          className={`contact-form ${showContact ? "show" : ""}`}
           onSubmit={handleSubmit}
         >
 

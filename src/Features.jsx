@@ -1,6 +1,11 @@
 import { useEffect, useRef, useState } from "react";
 import "./Features.css";
-
+import {
+  Video,
+  NotebookPen,
+  ChartNoAxesColumn,
+  Map
+} from "lucide-react";
 function Features() {
   const sectionRef = useRef(null);
   const [visible, setVisible] = useState(false);
@@ -9,25 +14,25 @@ function Features() {
   const features = [
     {
       title: "Video Lessons",
-      icon: "🎥",
+      icon: <Video />,
       description:
         "Learn through structured video lessons that explain concepts clearly and step by step. Pause, replay, and learn at your own pace.",
     },
     {
       title: "Notes & Resources",
-      icon: "📝",
+      icon: <NotebookPen />,
       description:
         "Get useful notes, summaries, and learning resources alongside your lessons so you can revise important concepts whenever you need.",
     },
     {
       title: "Track Your Progress",
-      icon: "📊",
+      icon: <ChartNoAxesColumn />,
       description:
         "Keep track of completed lessons, quiz scores, learning time, and overall course progress so you always know how far you've come.",
     },
     {
       title: "Learning Roadmaps",
-      icon: "🗺️",
+      icon: <Map />,
       description:
         "Follow structured learning roadmaps that show you what to learn next and help you move from the basics toward more advanced topics.",
     },

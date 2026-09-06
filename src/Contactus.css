@@ -10,12 +10,10 @@
   background: #f5eee4;
 
   color: #292421;
+  
 }
 
 
-/* =================================
-   HEADER
-================================= */
 
 .contact-header {
   max-width: 850px;
@@ -362,4 +360,67 @@
 
     gap: 0;
   }
+}
+/* =================================
+   CONTACT ELEMENT ENTRANCE ANIMATION
+   ================================= */
+
+.contact-header .contact-label,
+.contact-header h1,
+.contact-header > p,
+.contact-info-block,
+.contact-form {
+  opacity: 0;
+  transform: translateY(25px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+
+
+/* Header */
+
+.contact-header .contact-label.show {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 0s;
+}
+
+.contact-header h1.show {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 0.12s;
+}
+
+.contact-header > p.show {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 0.24s;
+}
+
+
+/* Contact information */
+
+.contact-info-block.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.contact-info-block:nth-child(1).show {
+  transition-delay: 0.1s;
+}
+
+.contact-info-block:nth-child(2).show {
+  transition-delay: 0.2s;
+}
+
+.contact-info-block:nth-child(3).show {
+  transition-delay: 0.3s;
+}
+
+
+/* Form */
+
+.contact-form.show {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 0.2s;
 }

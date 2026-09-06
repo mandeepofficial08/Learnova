@@ -222,7 +222,7 @@
   letter-spacing: -1px;
 }
 
-.about-mission > p:last-child {
+.about-mission>p:last-child {
   max-width: 600px;
 
   margin: 25px auto 0;
@@ -296,4 +296,87 @@
   .about-mission h2 {
     font-size: 30px;
   }
+}
+
+/* =================================
+   ABOUT ENTRANCE ANIMATION
+================================= */
+
+.about-hero .about-label,
+.about-hero h1,
+.about-intro,
+.about-section-title,
+.about-section-content,
+.about-card,
+.about-mission .about-label,
+.about-mission h2,
+.about-mission>p:last-child {
+  opacity: 0;
+  transform: translateY(25px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+
+.about-hero .about-label.show {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 0s;
+}
+
+.about-hero h1.show {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 0.12s;
+}
+
+.about-intro.show {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 0.24s;
+}
+
+.about-section-title.show {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 0.1s;
+}
+
+.about-section-content.show {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 0.2s;
+}
+
+.about-card.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.about-card:nth-child(1).show {
+  transition-delay: 0.1s;
+}
+
+.about-card:nth-child(2).show {
+  transition-delay: 0.2s;
+}
+
+.about-card:nth-child(3).show {
+  transition-delay: 0.3s;
+}
+
+.about-mission .about-label.show {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 0s;
+}
+
+.about-mission h2.show {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 0.12s;
+}
+
+.about-mission>p:last-child.show {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 0.24s;
 }

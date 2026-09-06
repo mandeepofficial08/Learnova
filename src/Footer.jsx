@@ -1,6 +1,31 @@
+import { useEffect, useState } from "react";
 import "./Footer.css";
 
 function Footer() {
+  const [showFooter, setShowFooter] = useState(false);
+
+  useEffect(() => {
+    const footer = document.querySelector(".footer");
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setShowFooter(true);
+          observer.disconnect();
+        }
+      },
+      {
+        threshold: 0.15,
+      }
+    );
+
+    if (footer) {
+      observer.observe(footer);
+    }
+
+    return () => observer.disconnect();
+  }, []);
+
   const scrollToSection = (id) => {
     const section = document.getElementById(id);
 
@@ -12,7 +37,7 @@ function Footer() {
   };
 
   return (
-    <footer className="footer">
+    <footer className={`footer ${showFooter ? "show" : ""}`}>
 
       <div className="footer-top">
         <span>Keep learning</span>
@@ -43,10 +68,14 @@ function Footer() {
 
         <span>•</span>
 
-        <button onClick={() => window.scrollTo({
-          top: 0,
-          behavior: "smooth"
-        })}>
+        <button
+          onClick={() =>
+            window.scrollTo({
+              top: 0,
+              behavior: "smooth",
+            })
+          }
+        >
           Home
         </button>
       </div>
