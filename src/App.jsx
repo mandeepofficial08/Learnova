@@ -1,7 +1,7 @@
 import Navbar from "./NavBar.jsx";
 import Home from "./Home.jsx";
 import MyLearning from "./MyLearning.jsx";
-
+import Login from "./Login.jsx";
 import {
   BrowserRouter,
   Routes,
@@ -17,6 +17,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/learning" element={<MyLearning />} />
+          <Route path="/login" element={<Login />} />
         </Routes>
       </div>
     </BrowserRouter>

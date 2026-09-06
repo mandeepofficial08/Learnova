@@ -1,7 +1,7 @@
 
 .explore-page {
   min-height: 100vh;
-  padding: 115px 7% 20px;
+  padding: 100px 7% 10px;
   background: #f5eee4;
   color: #292421;
   overflow: hidden;
@@ -864,7 +864,7 @@
 
 @media (max-width: 700px) {
   .explore-page {
-    padding: 95px 20px 70px;
+    padding: 70px 20px 70px;
   }
 
   .explore-header {

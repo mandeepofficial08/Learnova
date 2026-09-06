@@ -5,7 +5,7 @@
 .contact-page {
   min-height: 100vh;
 
-  padding-top: 80px;
+  padding-top: 20px;
 
   background: #f5eee4;
 
@@ -292,7 +292,7 @@
 @media (max-width: 850px) {
 
   .contact-header {
-    padding: 75px 25px 60px;
+    padding: 40px 25px 40px;
   }
 
   .contact-header h1 {
@@ -324,7 +324,7 @@
 @media (max-width: 550px) {
 
   .contact-page {
-    padding-top: 70px;
+    padding-top: 45px;
   }
 
   .contact-header {
