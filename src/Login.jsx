@@ -51,10 +51,7 @@ function Login() {
             Sign in with Google
           </button>
 
-          <button type="button" className="social-button">
-            <GitBranch size={17} strokeWidth={2} />
-            Sign in with GitHub
-          </button>
+         
 
         </div>
 
