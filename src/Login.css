@@ -722,14 +722,31 @@
   }
 
   .login-card {
-    max-width: 100%;
+    background: rgba(255, 251, 245, 0.22);
 
-    padding: 32px 24px 28px;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+
+    box-shadow: 0 20px 50px rgba(45, 32, 24, 0.06);
   }
 
-  .social-login {
-    grid-template-columns: 1fr;
+  .login-field input {
+    background: rgba(255, 253, 249, 0.45);
+
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
   }
+
+  .social-button {
+    background: rgba(255, 251, 245, 0.35);
+
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+  }
+
+
 
   .login-header h1 {
     font-size: 23px;
