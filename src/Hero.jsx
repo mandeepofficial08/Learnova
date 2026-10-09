@@ -15,7 +15,7 @@ function Hero() {
 
       <div className="hero-content">
 
-        <h1>Welcome to Learnify</h1>
+        <h1>Welcome to Learnova</h1>
 
         <p>
           Your journey to knowledge starts here.

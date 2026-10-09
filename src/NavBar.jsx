@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import "./NavBar.css";
-import logo from "./assets/logo.png";
-
+import logo from "/logo.png";
+import { User } from "lucide-react";
 import {
   useLocation,
   useNavigate,
@@ -23,6 +23,18 @@ function NavBar() {
 
   const location = useLocation();
   const navigate = useNavigate();
+useEffect(() => {
+  const checkLogin = () => {
+    
+      const user =
+  localStorage.getItem("learnovaUser") ||
+  sessionStorage.getItem("learnovaUser");
+
+    setIsLoggedIn(!!user);
+  };
+
+  checkLogin();
+}, [location.pathname]);
 
   const [pillStyle, setPillStyle] = useState({
     left: 0,
@@ -32,16 +44,13 @@ function NavBar() {
   // --------------------------------
   // Navigation links
   // --------------------------------
-
-  const links = isLoggedIn
-    ? [
-        "Home",
-        "Explore",
-        "My Learning",
-        "About",
-        "Contact Us",
-        "Profile",
-      ]
+const links = isLoggedIn
+  ? [
+      "Home",
+      "Explore",
+      "About",
+      "Contact Us",
+    ]
     : [
         "Home",
         "Explore",
@@ -59,10 +68,7 @@ function NavBar() {
         setActive("My Learning");
       }
 
-      if (location.pathname === "/profile") {
-        setActive("Profile");
-      }
-
+     
       return;
     }
 
@@ -334,29 +340,13 @@ function NavBar() {
       return;
     }
 
-    // ------------------------------
-    // MY LEARNING
-    // ------------------------------
-
-    if (link === "My Learning") {
-      setActive("My Learning");
-
-      navigate("/learning");
-
-      return;
-    }
+    
 
     // ------------------------------
     // PROFILE
     // ------------------------------
 
-    if (link === "Profile") {
-      setActive("Profile");
-
-      navigate("/profile");
-
-      return;
-    }
+  
   };
 
   // --------------------------------
@@ -374,6 +364,8 @@ function NavBar() {
   // --------------------------------
 
   const handleLogout = () => {
+    localStorage.removeItem("learnovaUser");
+sessionStorage.removeItem("learnovaUser");
     setIsLoggedIn(false);
 
     setActive("Home");
@@ -422,9 +414,7 @@ function NavBar() {
       return "/#contact";
     }
 
-    if (link === "Profile") {
-      return "/profile";
-    }
+   
 
     return "#";
   };
@@ -486,20 +476,22 @@ function NavBar() {
       {/* LOGIN / LOGOUT */}
 
       {!isLoggedIn ? (
-        <button
-          className="login-btn"
-          onClick={handleLogin}
-        >
-          Login
-        </button>
-      ) : (
-        <button
-          className="login-btn"
-          onClick={handleLogout}
-        >
-          Logout
-        </button>
-      )}
+  <button
+    className="login-btn"
+    onClick={handleLogin}
+  >
+    Login
+  </button>
+) : (
+  <button
+  className="profile-btn"
+  onClick={() => navigate("/user")}
+  aria-label="Open profile"
+  title="My Profile"
+>
+  <User size={23} strokeWidth={1.8} />
+</button>
+)}
 
       {/* HAMBURGER */}
 

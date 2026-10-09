@@ -1,17 +1,64 @@
 import { useState } from "react";
-import { GitBranch, Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff } from "lucide-react";
 import { Link } from "react-router-dom";
 import "./Login.css";
+import { useNavigate } from "react-router-dom";
 
 function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const [remember, setRemember] = useState(false);
 
-  const handleSubmit = (e) => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [message, setMessage] = useState("");
+const navigate = useNavigate();
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Backend login will be connected here later
-    console.log("Login submitted");
+    try {
+      const formData = new URLSearchParams();
+
+      formData.append("email", email);
+      formData.append("password", password);
+
+      const response = await fetch(
+        "/Learnova_backend/login.php",
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
+
+      const result = await response.text();
+
+      console.log("Backend response:", result);
+
+      const data = JSON.parse(result);
+
+      if (data.success) {
+        setMessage(data.message);
+
+        if (remember) {
+          localStorage.setItem(
+            "learnovaUser",
+            JSON.stringify(data.user)
+          );
+        } else {
+          sessionStorage.setItem(
+            "learnovaUser",
+            JSON.stringify(data.user)
+          );
+        }
+        navigate("/");
+
+      } else {
+        setMessage(data.message);
+      }
+
+    } catch (error) {
+      console.error("Login error:", error);
+      setMessage("Unable to connect to the backend.");
+    }
   };
 
   return (
@@ -19,12 +66,12 @@ function Login() {
 
       {/* Animated background */}
       <div className="login-bg-shape login-bg-shape-one"></div>
-<div className="login-bg-shape login-bg-shape-two"></div>
-<div className="login-bg-shape login-bg-shape-three"></div>
+      <div className="login-bg-shape login-bg-shape-two"></div>
+      <div className="login-bg-shape login-bg-shape-three"></div>
 
-<div className="login-small-shape login-small-shape-one"></div>
-<div className="login-small-shape login-small-shape-two"></div>
-<div className="login-small-shape login-small-shape-three"></div>
+      <div className="login-small-shape login-small-shape-one"></div>
+      <div className="login-small-shape login-small-shape-two"></div>
+      <div className="login-small-shape login-small-shape-three"></div>
 
       {/* Login Card */}
       <div className="login-card">
@@ -51,8 +98,6 @@ function Login() {
             Sign in with Google
           </button>
 
-         
-
         </div>
 
         {/* Divider */}
@@ -75,6 +120,8 @@ function Login() {
               id="email"
               type="email"
               placeholder="example@learnova.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               required
             />
           </div>
@@ -91,6 +138,8 @@ function Login() {
                 id="password"
                 type={showPassword ? "text" : "password"}
                 placeholder="Enter your password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
                 required
               />
 
@@ -135,6 +184,12 @@ function Login() {
           <button type="submit" className="login-button">
             Sign in
           </button>
+
+          {message && (
+            <p style={{ textAlign: "center", marginTop: "12px" }}>
+              {message}
+            </p>
+          )}
 
         </form>
 

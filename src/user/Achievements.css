@@ -1,0 +1,510 @@
+.achievements-page {
+  min-height: 100vh;
+  padding: 28px;
+  box-sizing: border-box;
+  background:
+    linear-gradient(
+      135deg,
+      #f5eee4 0%,
+      #e9dcce 48%,
+      #d8c7b8 100%
+    );
+  color: #292421;
+  overflow-x: hidden;
+}
+
+.achievements-container {
+  max-width: 1100px;
+  margin: auto;
+  padding: 30px 35px 90px;
+  box-sizing: border-box;
+}
+
+/* =========================
+   HEADER
+========================= */
+
+.achievements-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 30px;
+  margin-bottom: 70px;
+  animation: headerEnter 0.8s ease-out both;
+}
+
+.achievements-label {
+  color: #71665d;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1.7px;
+}
+
+.achievements-header h1 {
+  margin: 10px 0 12px;
+  font-size: clamp(48px, 7vw, 76px);
+  line-height: 0.95;
+  font-weight: 500;
+  letter-spacing: -3px;
+}
+
+.achievements-header p {
+  margin: 0;
+  color: #71665d;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.achievement-count {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #71665d;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.achievement-count svg {
+  color: #a68060;
+}
+
+/* =========================
+   ROADMAP
+========================= */
+
+.achievement-roadmap {
+  position: relative;
+  width: 100%;
+  min-height: 850px;
+  padding: 20px 0 60px;
+}
+
+/* Winding path */
+
+.roadmap-path {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 100%;
+  height: 100%;
+  transform: translateX(-50%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.roadmap-path svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.roadmap-path path {
+  fill: none;
+  stroke: rgba(113, 102, 93, 0.35);
+  stroke-width: 2;
+  stroke-dasharray: 7 9;
+  stroke-linecap: round;
+}
+
+/* =========================
+   ROADMAP ITEMS
+========================= */
+
+.roadmap-item {
+  position: absolute;
+  width: 50%;
+  min-height: 160px;
+  z-index: 2;
+  animation: achievementEnter 0.7s ease-out both;
+}
+
+/*
+   Alternating positions
+*/
+
+.roadmap-item:nth-child(2) {
+  top: 0;
+  left: 0;
+}
+
+.roadmap-item:nth-child(3) {
+  top: 175px;
+  right: 0;
+}
+
+.roadmap-item:nth-child(4) {
+  top: 350px;
+  left: 0;
+}
+
+.roadmap-item:nth-child(5) {
+  top: 525px;
+  right: 0;
+}
+
+.roadmap-item:nth-child(6) {
+  top: 700px;
+  left: 0;
+}
+
+/* =========================
+   ACHIEVEMENT NODE
+========================= */
+
+.achievement-node {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.roadmap-left .achievement-node {
+  justify-content: flex-end;
+  text-align: right;
+}
+
+.roadmap-right .achievement-node {
+  justify-content: flex-start;
+  text-align: left;
+}
+
+/* =========================
+   CIRCLE
+========================= */
+
+.achievement-dot {
+  width: 58px;
+  height: 58px;
+  min-width: 58px;
+  border-radius: 50%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  box-sizing: border-box;
+  z-index: 5;
+
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+/* Completed */
+
+.completed .achievement-dot {
+  background: #292421;
+  color: #ffffff;
+
+  border: 5px solid rgba(255, 250, 243, 0.8);
+
+  box-shadow:
+    0 0 0 1px rgba(41, 36, 33, 0.18),
+    0 8px 22px rgba(45, 32, 24, 0.14);
+}
+
+/* Current */
+
+.current .achievement-dot {
+  width: 78px;
+  height: 78px;
+  min-width: 78px;
+
+  background: #a68060;
+  color: #ffffff;
+
+  border: 7px solid rgba(255, 250, 243, 0.9);
+
+  box-shadow:
+    0 0 0 2px #a68060,
+    0 0 0 10px rgba(166, 128, 96, 0.12),
+    0 15px 35px rgba(45, 32, 24, 0.2);
+}
+
+/* Upcoming */
+
+.upcoming .achievement-dot {
+  background: rgba(255, 250, 243, 0.55);
+  color: #a68060;
+
+  border: 2px dashed rgba(166, 128, 96, 0.55);
+
+  box-shadow: none;
+}
+
+/* =========================
+   TEXT
+========================= */
+
+.achievement-info {
+  max-width: 260px;
+}
+
+.achievement-number {
+  display: block;
+
+  color: #a68060;
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 1.4px;
+}
+
+.achievement-info h2 {
+  margin: 6px 0;
+
+  color: #292421;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.achievement-info p {
+  margin: 0;
+
+  color: #71665d;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+/* =========================
+   STATUS
+========================= */
+
+.current-label,
+.completed-label,
+.locked-label {
+  display: inline-block;
+  margin-top: 10px;
+
+  font-size: 8px;
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+
+.current-label {
+  color: #292421;
+}
+
+.completed-label {
+  color: #71665d;
+}
+
+.locked-label {
+  color: #a68060;
+}
+
+/* =========================
+   CURRENT ACHIEVEMENT
+========================= */
+
+.current .achievement-info h2 {
+  font-size: 23px;
+}
+
+.current .achievement-info {
+  position: relative;
+}
+
+/* =========================
+   HOVER
+========================= */
+
+.roadmap-item:hover .achievement-dot {
+  transform: scale(1.07);
+}
+
+.completed:hover .achievement-dot {
+  box-shadow:
+    0 0 0 1px rgba(41, 36, 33, 0.18),
+    0 12px 28px rgba(45, 32, 24, 0.2);
+}
+
+/* =========================
+   ANIMATION
+========================= */
+
+.roadmap-item:nth-child(2) {
+  animation-delay: 0.15s;
+}
+
+.roadmap-item:nth-child(3) {
+  animation-delay: 0.25s;
+}
+
+.roadmap-item:nth-child(4) {
+  animation-delay: 0.35s;
+}
+
+.roadmap-item:nth-child(5) {
+  animation-delay: 0.45s;
+}
+
+.roadmap-item:nth-child(6) {
+  animation-delay: 0.55s;
+}
+
+@keyframes headerEnter {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes achievementEnter {
+  from {
+    opacity: 0;
+    transform: translateY(25px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* =========================
+   TABLET
+========================= */
+
+@media (max-width: 800px) {
+  .achievements-page {
+    padding: 18px;
+  }
+
+  .achievements-container {
+    padding: 25px 20px 70px;
+  }
+
+  .achievements-header {
+    margin-bottom: 55px;
+  }
+
+  .achievement-info {
+    max-width: 210px;
+  }
+
+  .roadmap-item {
+    width: 55%;
+  }
+
+  .roadmap-item:nth-child(2) {
+    left: -3%;
+  }
+
+  .roadmap-item:nth-child(3) {
+    right: -3%;
+  }
+
+  .roadmap-item:nth-child(4) {
+    left: -3%;
+  }
+
+  .roadmap-item:nth-child(5) {
+    right: -3%;
+  }
+
+  .roadmap-item:nth-child(6) {
+    left: -3%;
+  }
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 600px) {
+  .achievements-page {
+    padding: 8px;
+  }
+
+  .achievements-container {
+    padding: 20px 15px 60px;
+  }
+
+  .achievements-header {
+    display: block;
+    margin-bottom: 50px;
+  }
+
+  .achievement-count {
+    margin-top: 20px;
+  }
+
+  .achievement-roadmap {
+    min-height: auto;
+    padding: 10px 0 30px;
+  }
+
+  /* Straight vertical path on mobile */
+
+  .roadmap-path {
+    left: 29px;
+    width: 2px;
+    height: 100%;
+    transform: none;
+  }
+
+  .roadmap-path svg {
+    display: none;
+  }
+
+  .roadmap-path::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+
+    width: 2px;
+
+    background:
+      repeating-linear-gradient(
+        to bottom,
+        rgba(113, 102, 93, 0.35) 0,
+        rgba(113, 102, 93, 0.35) 8px,
+        transparent 8px,
+        transparent 15px
+      );
+  }
+
+  .roadmap-item,
+  .roadmap-item:nth-child(2),
+  .roadmap-item:nth-child(3),
+  .roadmap-item:nth-child(4),
+  .roadmap-item:nth-child(5),
+  .roadmap-item:nth-child(6) {
+    position: relative;
+    top: auto;
+    left: auto;
+    right: auto;
+
+    width: 100%;
+    min-height: 155px;
+
+    margin-bottom: 10px;
+  }
+
+  .roadmap-left .achievement-node,
+  .roadmap-right .achievement-node {
+    justify-content: flex-start;
+    text-align: left;
+  }
+
+  .achievement-dot,
+  .current .achievement-dot {
+    width: 58px;
+    height: 58px;
+    min-width: 58px;
+  }
+
+  .achievement-info {
+    max-width: 220px;
+  }
+
+  .current .achievement-info h2 {
+    font-size: 20px;
+  }
+}

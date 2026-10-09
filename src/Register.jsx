@@ -8,11 +8,51 @@ function Register() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [agree, setAgree] = useState(false);
 
-  const handleSubmit = (e) => {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+
+  const [message, setMessage] = useState("");
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Backend registration will be connected here later
-    console.log("Registration submitted");
+    if (password !== confirmPassword) {
+      setMessage("Passwords do not match.");
+      return;
+    }
+if (password.length < 8) {
+  setMessage("Password must be at least 8 characters long.");
+  return;
+}
+    try {
+  const formData = new URLSearchParams();
+
+  formData.append("name", name);
+  formData.append("email", email);
+  formData.append("password", password);
+
+  const response = await fetch(
+    "/Learnova_backend/register.php",
+    {
+      method: "POST",
+      body: formData,
+    }
+  );
+
+  const result = await response.text();
+
+  console.log("Backend response:", result);
+
+  const data = JSON.parse(result);
+
+  setMessage(data.message);
+
+} catch (error) {
+  console.error("Registration error:", error);
+  setMessage("Unable to connect to the backend.");
+}
   };
 
   return (
@@ -51,6 +91,8 @@ function Register() {
               id="name"
               type="text"
               placeholder="Enter your full name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
               required
             />
           </div>
@@ -65,6 +107,8 @@ function Register() {
               id="email"
               type="email"
               placeholder="example@learnova.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               required
             />
           </div>
@@ -80,6 +124,8 @@ function Register() {
                 id="password"
                 type={showPassword ? "text" : "password"}
                 placeholder="Create a password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
                 required
               />
 
@@ -108,6 +154,8 @@ function Register() {
                 id="confirmPassword"
                 type={showConfirmPassword ? "text" : "password"}
                 placeholder="Confirm your password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
                 required
               />
 
@@ -147,6 +195,12 @@ function Register() {
           >
             Create account
           </button>
+
+          {message && (
+            <p style={{ textAlign: "center", marginTop: "12px" }}>
+              {message}
+            </p>
+          )}
 
         </form>
 

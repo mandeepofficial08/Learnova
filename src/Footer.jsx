@@ -42,7 +42,7 @@ function Footer() {
       <div className="footer-top">
         <span>Keep learning</span>
         <span className="footer-dot">✦</span>
-        <span>Keep growing</span>
+        
       </div>
 
       <div className="footer-links">
@@ -80,9 +80,9 @@ function Footer() {
         </button>
       </div>
 
-      <p className="footer-credit">
+      {/* <p className="footer-credit">
         Made with <span>♥</span> for curious minds
-      </p>
+      </p> */}
 
     </footer>
   );

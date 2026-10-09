@@ -5,7 +5,7 @@ import {
   NotebookPen,
   CircleHelp,
   ClipboardCheck,
-  Puzzle
+ CheckCircle
  
 } from "lucide-react"; 
 function Explore() {
@@ -125,12 +125,12 @@ function Explore() {
     },
     {
       number: "05",
-      type: "THINK",
-      title: "Puzzles",
+      type: "RESULT",
+      title: "Check your understanding",
       description:
-        "Problems that make you stop and think a little harder about what you have learned.",
-      action: "Solve",
-      icon: <Puzzle />,
+        "See how well you understood the topic and whether you are ready to move on to the next one.",
+      action: "Check",
+      icon: <CheckCircle />,
     },
   
   ];
