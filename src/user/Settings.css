@@ -29,11 +29,11 @@
 }
 
 .settings-hero h1 {
-  margin: 0;
-  font-size: clamp(42px, 6vw, 64px);
-  line-height: 1;
-  font-weight: 400;
-  letter-spacing: -0.045em;
+  margin: 8px 0 10px;
+  font-size: clamp(50px, 6vw, 78px);
+  line-height: 0.95;
+  font-weight: 500;
+  letter-spacing: -3px;
 }
 
 .settings-hero h1 em {
@@ -1003,5 +1003,56 @@ button.settings-action:hover strong {
     min-height: 38px;
     padding: 0 14px;
     font-size: 12px;
+  }
+}
+
+/* Settings page entrance animation */
+@keyframes settingsEntrance {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.settings-hero,
+.settings-message,
+.settings-error,
+.settings-section,
+.danger-section {
+  animation: settingsEntrance 0.65s ease both;
+}
+
+.settings-hero {
+  animation-delay: 0.05s;
+}
+
+.settings-section:nth-of-type(2) {
+  animation-delay: 0.12s;
+}
+
+.settings-section:nth-of-type(3) {
+  animation-delay: 0.22s;
+}
+
+.settings-section:nth-of-type(4) {
+  animation-delay: 0.32s;
+}
+
+.danger-section {
+  animation-delay: 0.4s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .settings-hero,
+  .settings-message,
+  .settings-error,
+  .settings-section,
+  .danger-section {
+    animation: none;
   }
 }

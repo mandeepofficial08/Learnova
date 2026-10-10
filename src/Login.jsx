@@ -49,7 +49,7 @@ const navigate = useNavigate();
             JSON.stringify(data.user)
           );
         }
-        navigate("/");
+        navigate("/user");
 
       } else {
         setMessage(data.message);
@@ -90,23 +90,7 @@ const navigate = useNavigate();
           </p>
         </div>
 
-        {/* Social Login */}
-        <div className="social-login">
-
-          <button type="button" className="social-button">
-            <span className="google-icon">G</span>
-            Sign in with Google
-          </button>
-
-        </div>
-
-        {/* Divider */}
-        <div className="login-divider">
-          <span></span>
-          <p>or sign in with</p>
-          <span></span>
-        </div>
-
+        
         {/* Form */}
         <form onSubmit={handleSubmit}>
 

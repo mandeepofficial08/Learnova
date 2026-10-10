@@ -1175,3 +1175,48 @@
     width: 100%;
   }
 }
+
+
+/* Course details page entrance animation */
+@keyframes coursePageEnter {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.course-details-page {
+  animation: coursePageEnter 0.65s ease both;
+  overflow-x: clip;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .course-details-page {
+    animation: none;
+  }
+}
+/* Course details page entrance animation */
+@keyframes coursePageEnter {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.course-details-page {
+  animation: coursePageEnter 0.65s ease both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .course-details-page {
+    animation: none;
+  }
+}

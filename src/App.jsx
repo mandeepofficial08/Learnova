@@ -16,6 +16,7 @@ import NotesPages from "./user/NotesPages.jsx";
 import TopicPage from "./user/TopicPage.jsx";
 import ResourcePage from "./user/ResourcePage.jsx";
 import ScrollRestoration from "./ScrollRestoration";
+import GuestCourseDetail from "./CourseDetail.jsx";
 import {
   BrowserRouter,
   Routes,
@@ -57,7 +58,10 @@ function AppContent() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/MyLearning" element={<MyLearning />} />
-
+        <Route
+          path="/coursedetail"
+          element={<GuestCourseDetail />}
+        />
         <Route
           path="/user"
           element={
@@ -77,18 +81,18 @@ function AppContent() {
             element={<CourseDetails />}
           />
           <Route
-  path="courses/:courseId/topic/:topicId"
-  element={<TopicPage />}
-/>
-<Route
-  path="resource/:resourceUrl"
-  element={<ResourcePage />}
-/>
-<Route path="video/:videoUrl" element={<VideoPage />} />
-<Route
-  path="notes/:notesUrl"
-  element={<NotesPages />}
-/>
+            path="courses/:courseId/topic/:topicId"
+            element={<TopicPage />}
+          />
+          <Route
+            path="resource/:resourceUrl"
+            element={<ResourcePage />}
+          />
+          <Route path="video/:videoUrl" element={<VideoPage />} />
+          <Route
+            path="notes/:notesUrl"
+            element={<NotesPages />}
+          />
 
           <Route path="achievements" element={<Achievements />} />
 
@@ -103,9 +107,9 @@ function AppContent() {
 function App() {
   return (
     <BrowserRouter>
-  <ScrollRestoration />
-  <AppContent />
-</BrowserRouter>
+      <ScrollRestoration />
+      <AppContent />
+    </BrowserRouter>
   );
 }
 

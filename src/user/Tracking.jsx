@@ -1,112 +1,129 @@
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
   BarChart3,
-  Target,
-  Flame,
   Clock3,
-  Activity,
   ChevronDown,
 } from "lucide-react";
+import { toast } from "react-toastify";
 import "./Tracking.css";
 
-function formatTime(seconds) {
-  const hours = Math.floor(seconds / 3600);
-  const minutes = Math.floor((seconds % 3600) / 60);
-  const remainingSeconds = seconds % 60;
+const API_BASE = "http://localhost/Learnova_backend";
 
-  if (hours > 0) {
-    return `${hours}h ${minutes}m`;
-  }
+function formatTime(seconds = 0) {
+  const safeSeconds = Math.max(0, Math.floor(Number(seconds) || 0));
+  const hours = Math.floor(safeSeconds / 3600);
+  const minutes = Math.floor((safeSeconds % 3600) / 60);
+  const remainingSeconds = safeSeconds % 60;
 
-  if (minutes > 0) {
-    return `${minutes}m ${remainingSeconds}s`;
-  }
-
+  if (hours > 0) return `${hours}h ${minutes}m`;
+  if (minutes > 0) return `${minutes}m ${remainingSeconds}s`;
   return `${remainingSeconds}s`;
+}
+
+function getUser() {
+  try {
+    const storedUser =
+      localStorage.getItem("learnovaUser") ||
+      sessionStorage.getItem("learnovaUser");
+
+    return storedUser ? JSON.parse(storedUser) : null;
+  } catch {
+    return null;
+  }
 }
 
 function Tracking() {
   const [tracking, setTracking] = useState(null);
   const [loading, setLoading] = useState(true);
   const [selectedCourseId, setSelectedCourseId] = useState(null);
-  const [hoveredDay, setHoveredDay] = useState(null);
   const [courseDropdownOpen, setCourseDropdownOpen] = useState(false);
 
-  const getUser = () => {
-    const storedUser =
-      localStorage.getItem("learnovaUser") ||
-      sessionStorage.getItem("learnovaUser");
+  const selectedCourse = tracking?.selected_course;
+  const courseId = Number(selectedCourseId || selectedCourse?.id || 0);
 
-    if (!storedUser) {
-      return null;
-    }
+  const totalSeconds = Number(tracking?.total_seconds || 0);
+  const todaySeconds = Number(tracking?.today_seconds || 0);
 
-    return JSON.parse(storedUser);
-  };
+  const fetchTracking = useCallback(async (id = null, showLoader = false) => {
+    const currentUser = getUser();
 
-  const fetchTracking = (courseId = null) => {
-    const user = getUser();
-
-    if (!user) {
+    if (!currentUser?.id) {
+      setTracking(null);
       setLoading(false);
       return;
     }
 
-    setLoading(true);
+    if (showLoader) setLoading(true);
 
-    let url =
-      `http://localhost/Learnova_backend/tracking.php?user_id=${user.id}`;
-
-    if (courseId) {
-      url += `&course_id=${courseId}`;
-    }
-
-    fetch(url)
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.success) {
-          setTracking(data);
-
-          if (data.selected_course) {
-            setSelectedCourseId(
-              Number(data.selected_course.id)
-            );
-          }
-        }
-      })
-      .catch((error) => {
-        console.error(
-          "Error fetching tracking data:",
-          error
-        );
-      })
-      .finally(() => {
-        setLoading(false);
+    try {
+      const params = new URLSearchParams({
+        user_id: String(currentUser.id),
       });
-  };
 
-  useEffect(() => {
-    const params = new URLSearchParams(
-      window.location.search
-    );
+      if (id) params.set("course_id", String(id));
 
-    const courseId = params.get("course_id");
+      const response = await fetch(
+        `${API_BASE}/tracking.php?${params}`
+      );
 
-    if (courseId) {
-      fetchTracking(Number(courseId));
-    } else {
-      fetchTracking();
+      const data = await response.json();
+
+      if (!response.ok || !data.success) {
+        throw new Error(
+          data.message || "Unable to load learning activity."
+        );
+      }
+
+      setTracking(data);
+
+      const chosenId = Number(data.selected_course?.id);
+      if (chosenId) setSelectedCourseId(chosenId);
+    } catch (error) {
+      console.error("Tracking request failed:", error);
+
+      // Avoid repeated error toasts during automatic refreshes.
+      if (showLoader) {
+        toast.error(error.message || "Could not load tracking.");
+      }
+    } finally {
+      if (showLoader) setLoading(false);
     }
   }, []);
 
-  const handleCourseChange = (event) => {
-    const courseId = Number(event.target.value);
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const id = Number(params.get("course_id")) || null;
 
-    setSelectedCourseId(courseId);
+    fetchTracking(id, true);
+  }, [fetchTracking]);
+
+  // Refresh live learning time and daily activity while the page is visible.
+  useEffect(() => {
+    const refresh = () => {
+      if (document.visibilityState === "visible") {
+        fetchTracking(courseId || null);
+      }
+    };
+
+    const intervalId = window.setInterval(refresh, 10000);
+
+    document.addEventListener("visibilitychange", refresh);
+    window.addEventListener("focus", refresh);
+
+    return () => {
+      window.clearInterval(intervalId);
+      document.removeEventListener("visibilitychange", refresh);
+      window.removeEventListener("focus", refresh);
+    };
+  }, [fetchTracking, courseId]);
+
+  const handleCourseChange = (id) => {
+    const nextId = Number(id);
+
     setCourseDropdownOpen(false);
-
-    fetchTracking(courseId);
+    setSelectedCourseId(nextId);
+    fetchTracking(nextId, true);
   };
 
   if (loading) {
@@ -119,253 +136,165 @@ function Tracking() {
     );
   }
 
-  if (!tracking || !tracking.enrolled) {
+  if (!tracking?.enrolled) {
     return (
       <div className="tracking-page">
         <div className="tracking-container">
           <h1>No active course</h1>
-
-          <p>
-            Enroll in a course to start tracking your
-            learning.
-          </p>
+          <p>Enroll in a course to view your learning statistics.</p>
         </div>
       </div>
     );
   }
 
-  // Last 7 days
-  const today = new Date();
-
+  // Build the last seven calendar days, including days with no activity.
   const weekDays = [];
+  const today = new Date();
 
   for (let i = 6; i >= 0; i--) {
     const date = new Date(today);
-
     date.setDate(today.getDate() - i);
 
-    const dateKey = date.toISOString().split("T")[0];
+    const dateKey = [
+      date.getFullYear(),
+      String(date.getMonth() + 1).padStart(2, "0"),
+      String(date.getDate()).padStart(2, "0"),
+    ].join("-");
 
-    const dayName = date.toLocaleDateString(
-      "en-US",
-      {
-        weekday: "short",
-      }
+    const activity = tracking.weekly_activity?.find(
+      (item) => item.date === dateKey
     );
-
-    const activity =
-      tracking.weekly_activity.find(
-        (item) => item.date === dateKey
-      );
 
     weekDays.push({
       date: dateKey,
-      day: dayName,
-      seconds: activity
-        ? activity.seconds
-        : 0,
+      day: date.toLocaleDateString("en-US", {
+        weekday: "short",
+      }),
+      seconds: Math.max(0, Number(activity?.seconds || 0)),
     });
   }
 
-  /*
-    Chart percentage is based on the
-    selected course's daily goal.
-  */
-
-  const goalSeconds =
-    tracking.daily_goal_hours * 60 * 60;
+  // No goal or fixed maximum. The busiest displayed day sets the scale.
+  const maximumDaySeconds = Math.max(
+    1,
+    ...weekDays.map((day) => day.seconds)
+  );
 
   return (
     <div className="tracking-page">
       <div className="tracking-container">
-
-        {/* Header */}
-
         <div className="tracking-header">
-
           <div>
-            <span className="tracking-label">
-              LEARNING
-            </span>
-
-            <h1>Today's learning</h1>
-
-            <p>
-              {formatTime(
-                tracking.today_seconds
-              )}{" "}
-              spent learning today.
-            </p>
+            <span className="tracking-label">LEARNING</span>
+            <h1>Learning time</h1>
+            <p>{formatTime(todaySeconds)} spent learning today.</p>
           </div>
 
-          {/* Course selector */}
-
           <div className="tracking-course-selector">
-
             <label>COURSE</label>
 
             <div className="custom-course-dropdown">
-
               <button
                 type="button"
                 className="course-dropdown-button"
                 onClick={() =>
-                  setCourseDropdownOpen(
-                    !courseDropdownOpen
-                  )
+                  setCourseDropdownOpen((open) => !open)
                 }
+                aria-expanded={courseDropdownOpen}
               >
                 <div className="course-button-content">
-
                   <span className="course-button-label">
-                    {tracking.courses.find(
+                    {tracking.courses?.find(
                       (course) =>
-                        course.course_id ===
-                        Number(selectedCourseId)
-                    )?.course_title}
+                        Number(course.course_id) === courseId
+                    )?.course_title ||
+                      selectedCourse?.title ||
+                      "Select course"}
                   </span>
 
                   <span className="course-button-subtitle">
-                    Current course
+                    Learning statistics
                   </span>
-
                 </div>
 
                 <ChevronDown
                   size={17}
                   className={
-                    courseDropdownOpen
-                      ? "course-chevron-open"
-                      : ""
+                    courseDropdownOpen ? "course-chevron-open" : ""
                   }
                 />
-
               </button>
 
               {courseDropdownOpen && (
                 <div className="course-dropdown-menu">
+                  {tracking.courses?.map((course) => (
+                    <button
+                      type="button"
+                      key={course.course_id}
+                      className={`course-dropdown-item ${
+                        courseId === Number(course.course_id)
+                          ? "selected"
+                          : ""
+                      }`}
+                      onClick={() =>
+                        handleCourseChange(course.course_id)
+                      }
+                    >
+                      <div className="course-item-number">
+                        {String(course.course_id).padStart(2, "0")}
+                      </div>
 
-                  {tracking.courses.map(
-                    (course) => (
+                      <div className="course-item-content">
+                        <span>{course.course_title}</span>
+                        <small>View learning time</small>
+                      </div>
 
-                      <button
-                        type="button"
-                        key={course.course_id}
-                        className={`course-dropdown-item ${
-                          Number(selectedCourseId) ===
-                          course.course_id
-                            ? "selected"
-                            : ""
-                        }`}
-                        onClick={() => {
-                          handleCourseChange({
-                            target: {
-                              value: course.course_id,
-                            },
-                          });
-                        }}
-                      >
-
-                        <div className="course-item-number">
-                          {String(
-                            course.course_id
-                          ).padStart(2, "0")}
-                        </div>
-
-                        <div className="course-item-content">
-
-                          <span>
-                            {course.course_title}
-                          </span>
-
-                          <small>
-                            {course.daily_goal_hours}h daily goal
-                          </small>
-
-                        </div>
-
-                        {Number(selectedCourseId) ===
-                          course.course_id && (
-                          <div className="course-selected-dot"></div>
-                        )}
-
-                      </button>
-
-                    )
-                  )}
-
+                      {courseId === Number(course.course_id) && (
+                        <div className="course-selected-dot" />
+                      )}
+                    </button>
+                  ))}
                 </div>
               )}
-
             </div>
-
           </div>
-
         </div>
 
-        {/* Weekly chart */}
-
         <section className="progress-section">
-
           <div className="section-heading">
-
             <div>
-              <span>PROGRESS</span>
-
-              <h2>
-                Your learning activity
-              </h2>
+              <span>LEARNING ACTIVITY</span>
+              <h2>Your learning this week</h2>
             </div>
 
             <BarChart3 size={22} />
-
           </div>
 
           <div className="chart-area">
-
-            <div className="chart-y-axis">
-
-              <span>100%</span>
-              <span>75%</span>
-              <span>50%</span>
-              <span>25%</span>
-              <span>0%</span>
-
+            <div className="chart-y-axis tracking-time-axis">
+              <span>{formatTime(maximumDaySeconds)}</span>
+              <span>{formatTime(maximumDaySeconds * 0.75)}</span>
+              <span>{formatTime(maximumDaySeconds * 0.5)}</span>
+              <span>{formatTime(maximumDaySeconds * 0.25)}</span>
+              <span>0s</span>
             </div>
 
             <div className="chart-content">
-
               <div className="chart-grid">
-
-                <span></span>
-                <span></span>
-                <span></span>
-                <span></span>
-                <span></span>
-
+                <span />
+                <span />
+                <span />
+                <span />
+                <span />
               </div>
 
               <div className="chart-bars">
-
                 {weekDays.map((day) => {
-
-                  /*
-                    Calculate percentage based
-                    on daily goal.
-                  */
-
-                  const percentage =
-                    goalSeconds > 0
-                      ? (day.seconds /
-                          goalSeconds) *
-                        100
-                      : 0;
-
                   const height =
                     day.seconds > 0
-                      ? Math.min(
-                          percentage,
-                          100
+                      ? Math.max(
+                          2,
+                          (day.seconds / maximumDaySeconds) * 100
                         )
                       : 0;
 
@@ -374,202 +303,53 @@ function Tracking() {
                       className="chart-bar-wrapper"
                       key={day.date}
                     >
-
                       <div
                         className="chart-bar"
-                        style={{
-                          height:
-                            `${height}%`,
-                        }}
-                        onMouseEnter={() =>
-                          setHoveredDay(
-                            day.date
-                          )
-                        }
-                        onMouseLeave={() =>
-                          setHoveredDay(null)
-                        }
+                        style={{ height: `${height}%` }}
+                        title={`${day.day}: ${formatTime(day.seconds)}`}
+                        aria-label={`${day.day}: ${formatTime(day.seconds)} of learning`}
                       >
-
-                        {hoveredDay ===
-                          day.date &&
-                          day.seconds > 0 && (
-                            <div className="bar-value">
-                              {formatTime(
-                                day.seconds
-                              )}
-                            </div>
-                          )}
-
+                        {day.seconds > 0 && (
+                          <div className="bar-value">
+                            {formatTime(day.seconds)}
+                          </div>
+                        )}
                       </div>
 
-                      <span>
-                        {day.day}
-                      </span>
-
+                      <span>{day.day}</span>
                     </div>
                   );
                 })}
-
               </div>
-
             </div>
-
           </div>
-
-          {/* Goal explanation */}
-
-          <div className="chart-goal">
-
-            <Target size={15} />
-
-            <span>
-              Daily goal:{" "}
-              {tracking.daily_goal_hours} hour
-              {tracking.daily_goal_hours > 1
-                ? "s"
-                : ""}
-            </span>
-
-          </div>
-
         </section>
 
-        {/* Stats */}
-
-        <div className="tracking-stats">
-
+        <div className="tracking-stats tracking-time-stats">
           <div className="tracking-stat">
-
-            <div className="stat-icon">
-              <Target size={19} />
-            </div>
-
-            <div>
-
-              <span>GOAL</span>
-
-              <h3>
-                {tracking.daily_goal_hours}h
-              </h3>
-
-              <p>
-                Daily learning goal
-              </p>
-
-            </div>
-
-          </div>
-
-          <div className="tracking-stat">
-
-            <div className="stat-icon">
-              <Flame size={19} />
-            </div>
-
-            <div>
-
-              <span>STREAK</span>
-
-              <h3>—</h3>
-
-              <p>
-                Current streak
-              </p>
-
-            </div>
-
-          </div>
-
-          <div className="tracking-stat">
-
             <div className="stat-icon">
               <Clock3 size={19} />
             </div>
 
             <div>
-
-              <span>TIME</span>
-
-              <h3>
-                {formatTime(
-                  tracking.total_seconds
-                )}
-              </h3>
-
-              <p>
-                Total learning time
-              </p>
-
+              <span>TODAY</span>
+              <h5>{formatTime(todaySeconds)}</h5>
+              <p>Time spent today</p>
             </div>
-
           </div>
 
           <div className="tracking-stat">
-
             <div className="stat-icon">
-              <Activity size={19} />
+              <BarChart3 size={19} />
             </div>
 
             <div>
-
-              <span>ACTIVITY</span>
-
-              <h3>
-                {tracking.completed_topics}
-              </h3>
-
-              <p>
-                Topics completed
-              </p>
-
+              <span>COURSE TOTAL</span>
+              <h5>{formatTime(totalSeconds)}</h5>
+              <p>Accumulated learning time</p>
             </div>
-
           </div>
-
         </div>
-
-        {/* Recent activity */}
-
-        <section className="activity-section">
-
-          <div className="section-heading">
-
-            <div>
-
-              <span>ACTIVITY</span>
-
-              <h2>
-                Recent learning activity
-              </h2>
-
-            </div>
-
-            <Activity size={22} />
-
-          </div>
-
-          <div className="activity-empty">
-
-            <Activity size={25} />
-
-            <p>
-              {tracking.today_seconds > 0
-                ? `You've learned for ${formatTime(
-                    tracking.today_seconds
-                  )} today.`
-                : "No learning activity yet."}
-            </p>
-
-            <span>
-              Keep learning to build your
-              progress.
-            </span>
-
-          </div>
-
-        </section>
-
       </div>
     </div>
   );

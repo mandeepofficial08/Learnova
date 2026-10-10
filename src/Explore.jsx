@@ -1,33 +1,41 @@
 import { useEffect, useRef, useState } from "react";
 import "./Explore.css";
+import { useNavigate } from "react-router-dom";
 import {
   Play,
   NotebookPen,
-  CircleHelp,
-  ClipboardCheck,
- CheckCircle
- 
-} from "lucide-react"; 
+  Activity,
+} from "lucide-react";
+function getLoggedInUser() {
+  try {
+    const storedUser =
+      localStorage.getItem("learnovaUser") ||
+      sessionStorage.getItem("learnovaUser");
+
+    return storedUser ? JSON.parse(storedUser) : null;
+  } catch {
+    return null;
+  }
+}
 function Explore() {
   const [selectedTopic, setSelectedTopic] = useState("Web Development");
   const [selectedResource, setSelectedResource] = useState(0);
-
+  const navigate = useNavigate();
   const [courses, setCourses] = useState([]);
   const [search, setSearch] = useState("");
   const [searchOpen, setSearchOpen] = useState(false);
   const [showAll, setShowAll] = useState(false);
-
+  const [selectedCourse, setSelectedCourse] = useState(null);
   const exploreRef = useRef(null);
   const [showExplore, setShowExplore] = useState(false);
 
+
   /* =================================
-     LOAD COURSES FROM API
-  ================================= */
+   LOAD COURSES FROM LEANOVA DATABASE
+================================= */
 
   useEffect(() => {
-    fetch(
-      "https://6a62f4a71bffb2ffab8b8e77.mockapi.io/api/v1/courses"
-    )
+    fetch("http://localhost/Learnova_backend/courses.php")
       .then((response) => {
         if (!response.ok) {
           throw new Error("Failed to fetch courses");
@@ -36,13 +44,16 @@ function Explore() {
         return response.json();
       })
       .then((data) => {
-        setCourses(data);
+        if (!data.success || !Array.isArray(data.courses)) {
+          throw new Error("Invalid course data");
+        }
+
+        setCourses(data.courses);
       })
       .catch((error) => {
         console.error("Course API error:", error);
       });
   }, []);
-
   /* =================================
      EXPLORE ENTRANCE ANIMATION
   ================================= */
@@ -73,14 +84,6 @@ function Explore() {
      TOPICS
   ================================= */
 
-  const topics = [
-    "Web Development",
-    "Programming",
-    "Databases",
-    "Networks",
-    "Data Structures",
-    "Operating Systems",
-  ];
 
   /* =================================
      LEARNING RESOURCES
@@ -92,7 +95,7 @@ function Explore() {
       type: "WATCH",
       title: "Video lessons",
       description:
-        "Learn visually through short explanations you can pause, replay and come back to later.",
+        "Watch lessons, learn new concepts, and revisit videos whenever you need.",
       action: "Watch",
       icon: <Play />,
     },
@@ -101,38 +104,19 @@ function Explore() {
       type: "READ",
       title: "Notes & explanations",
       description:
-        "Keep the important concepts close. Read through them whenever you need a quick refresher.",
+        "Read course notes and explanations to revise important concepts.",
       action: "Read",
       icon: <NotebookPen />,
     },
     {
       number: "03",
-      type: "PRACTICE",
-      title: "Practice questions",
+      type: "ACTIVITY",
+      title: "Check Activity",
       description:
-        "See whether you can actually use what you just learned by solving practical questions.",
-      action: "Practice",
-      icon: <ClipboardCheck />,
-    },
-    {
-      number: "04",
-      type: "TEST",
-      title: "Quick quizzes",
-      description:
-        "Find out what you remember before moving ahead with a short knowledge check.",
-      action: "Test",
-      icon: <CircleHelp />,
-    },
-    {
-      number: "05",
-      type: "RESULT",
-      title: "Check your understanding",
-      description:
-        "See how well you understood the topic and whether you are ready to move on to the next one.",
+        "Check your total time spent, learning activity, and overall progress.",
       action: "Check",
-      icon: <CheckCircle />,
+      icon: <Activity />,
     },
-  
   ];
 
   /* =================================
@@ -209,9 +193,8 @@ function Explore() {
 
       <div className="explore-search-area">
         <div
-          className={`explore-search ${
-            searchOpen ? "search-open" : ""
-          }`}
+          className={`explore-search ${searchOpen ? "search-open" : ""
+            }`}
         >
           <input
             type="text"
@@ -251,6 +234,9 @@ function Explore() {
                     className="course-result"
                     key={course.id}
                     onClick={() => {
+                      setSelectedCourse(course);
+                      setSelectedTopic(course.title);
+                      setSelectedResource(0);
                       setSearch(course.title);
                       setSearchOpen(false);
                     }}
@@ -285,38 +271,6 @@ function Explore() {
       </div>
 
       {/* =================================
-          TOPICS
-      ================================= */}
-
-      <div className="topic-section">
-        <div className="topic-heading">
-          <span>BROWSE</span>
-        </div>
-
-        <div className="topic-list">
-          {topics.map((topic, index) => (
-            <div className="topic-wrapper" key={topic}>
-              {index !== 0 && (
-                <span className="topic-dot">·</span>
-              )}
-
-              <button
-                className={`topic-btn ${
-                  selectedTopic === topic ? "active" : ""
-                }`}
-                onClick={() => {
-                  setSelectedTopic(topic);
-                  setSelectedResource(0);
-                }}
-              >
-                {topic}
-              </button>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* =================================
           LEARNING CONTENT
       ================================= */}
 
@@ -327,11 +281,8 @@ function Explore() {
           </span>
 
           <h2>
-            {selectedTopic === "Web Development"
-              ? "WEB DEVELOPMENT"
-              : selectedTopic.toUpperCase()}
+            {(selectedCourse?.title || selectedTopic).toUpperCase()}
           </h2>
-
           <p>Start wherever you want.</p>
         </div>
 
@@ -342,15 +293,36 @@ function Explore() {
             return (
               <button
                 key={resource.title}
-                className={`resource-item ${
-                  isSelected ? "selected" : ""
-                }`}
+                className={`resource-item ${isSelected ? "selected" : ""
+                  }`}
                 style={{
-                  "--resource-delay": `${
-                    0.15 + index * 0.08
-                  }s`,
+                  "--resource-delay": `${0.15 + index * 0.08
+                    }s`,
                 }}
-                onClick={() => setSelectedResource(index)}
+                onClick={() => {
+                  const courseToOpen =
+                    selectedCourse ||
+                    courses.find(
+                      (course) =>
+                        course.title?.toLowerCase() ===
+                        selectedTopic.toLowerCase()
+                    );
+
+                  const user = getLoggedInUser();
+
+                  if (user && courseToOpen?.id) {
+                    navigate(`/user/courses/${courseToOpen.id}`);
+                  } else {
+                    navigate("/coursedetail", {
+                      state: {
+                        course: courseToOpen || {
+                          title: selectedTopic,
+                          category: selectedTopic,
+                        },
+                      },
+                    });
+                  }
+                }}
               >
                 <div className="resource-number">
                   {resource.number}
@@ -369,12 +341,6 @@ function Explore() {
 
                   <p>{resource.description}</p>
 
-                  <div className="resource-extra">
-                    <span>
-                      Selected · Ready to{" "}
-                      {resource.action.toLowerCase()}
-                    </span>
-                  </div>
                 </div>
 
                 <div className="resource-action">

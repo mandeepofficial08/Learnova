@@ -7,7 +7,7 @@ import {
   Target,
   UserRound,
   Mail,
-  Sparkles,  Trophy,
+  Sparkles, Trophy,
 
   Clock3,
 } from "lucide-react";
@@ -48,7 +48,7 @@ function Home() {
             <div className="message-card-top">
               <span className="card-label">WELCOME BACK</span>
 
-              
+
             </div>
 
             <div className="message-content">
@@ -94,7 +94,7 @@ function Home() {
         {/* THREE CARDS */}
         <div className="three-cards">
 
-          <Link to="/user/tracking" className="mini-card pick-card">
+          <Link to="/user/courses" className="mini-card pick-card">
             <div className="mini-card-top">
               <span>Pick up</span>
 
@@ -105,7 +105,7 @@ function Home() {
 
             <div className="mini-card-bottom">
               <BookOpen size={22} />
-              <h3>Continue learning</h3>
+              <h3>Your Learning Space</h3>
             </div>
           </Link>
 
@@ -120,13 +120,13 @@ function Home() {
 
             <div className="mini-card-bottom">
               <Compass size={22} />
-              <h3>Discover something new</h3>
+              <h3>Find Your Next Skill</h3>
             </div>
           </Link>
 
-          <Link to="/user/courses" className="mini-card goal-card">
+          <Link to="/user/tracking" className="mini-card goal-card">
             <div className="mini-card-top">
-              <span>Goal</span>
+              <span></span>
 
               <div className="mini-arrow">
                 <ArrowUpRight size={17} />
@@ -135,7 +135,7 @@ function Home() {
 
             <div className="mini-card-bottom">
               <Target size={22} />
-              <h3>Build your learning habit</h3>
+              <h3>Your Progress</h3>
             </div>
           </Link>
 
@@ -144,25 +144,7 @@ function Home() {
         {/* BOTTOM */}
         <div className="bottom-cards">
 
-          <div className="bottom-card">
           
-
-           <Link
-  to="/user/achievements"
-  className="bottom-card achievements-card"
->
-  <div className="bottom-card-icon">
-    <Trophy size={19} />
-  </div>
-
-  <div>
-    <span>Achievements</span>
-    <h3>View your learning achievements.</h3>
-  </div>
-
-  <ArrowUpRight size={20} />
-</Link>
-          </div>
 
           <Link
             to="/user/settings"
@@ -170,7 +152,7 @@ function Home() {
           >
             <div>
               <span>Profile</span>
-              <h3>Manage your account details.</h3>
+              <h2>Manage your account details.</h2>
             </div>
 
             <ArrowUpRight size={20} />

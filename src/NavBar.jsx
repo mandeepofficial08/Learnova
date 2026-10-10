@@ -58,81 +58,49 @@ const links = isLoggedIn
         "Contact Us",
       ];
 
-  // --------------------------------
-  // Detect current section
-  // --------------------------------
 
-  useEffect(() => {
-    if (location.pathname !== "/") {
-      if (location.pathname === "/learning") {
-        setActive("My Learning");
-      }
+// Detect current section and route
+useEffect(() => {
+  // Dedicated Explore page
+  if (location.pathname === "/explore") {
+    setActive("Explore");
+    return;
+  }
 
-     
-      return;
+  // Other internal pages
+  if (location.pathname !== "/") {
+    setActive("");
+    return;
+  }
+
+  const handleScroll = () => {
+    if (autoScrollingRef.current) return;
+
+    const explore = document.getElementById("explore");
+    const about = document.getElementById("about");
+    const contact = document.getElementById("contact");
+
+    const scrollPosition = window.scrollY + 150;
+
+    if (contact && scrollPosition >= contact.offsetTop) {
+      setActive("Contact Us");
+    } else if (about && scrollPosition >= about.offsetTop) {
+      setActive("About");
+    } else if (explore && scrollPosition >= explore.offsetTop) {
+      setActive("Explore");
+    } else {
+      setActive("Home");
     }
+  };
 
-    const handleScroll = () => {
-      // IMPORTANT:
-      // Don't change the active link while
-      // navbar-triggered smooth scrolling
-      // is happening.
-      if (autoScrollingRef.current) {
-        return;
-      }
+  handleScroll();
 
-      const explore =
-        document.getElementById("explore");
+  window.addEventListener("scroll", handleScroll);
 
-      const about =
-        document.getElementById("about");
-
-      const contact =
-        document.getElementById("contact");
-
-      const scrollPosition =
-        window.scrollY + 150;
-
-      if (
-        contact &&
-        scrollPosition >= contact.offsetTop
-      ) {
-        setActive("Contact Us");
-      }
-
-      else if (
-        about &&
-        scrollPosition >= about.offsetTop
-      ) {
-        setActive("About");
-      }
-
-      else if (
-        explore &&
-        scrollPosition >= explore.offsetTop
-      ) {
-        setActive("Explore");
-      }
-
-      else {
-        setActive("Home");
-      }
-    };
-
-    handleScroll();
-
-    window.addEventListener(
-      "scroll",
-      handleScroll
-    );
-
-    return () => {
-      window.removeEventListener(
-        "scroll",
-        handleScroll
-      );
-    };
-  }, [location.pathname]);
+  return () => {
+    window.removeEventListener("scroll", handleScroll);
+  };
+}, [location.pathname]);
 
   // --------------------------------
   // Move active pill
@@ -289,21 +257,19 @@ const links = isLoggedIn
     // ------------------------------
     // EXPLORE
     // ------------------------------
+// ------------------------------
+// EXPLORE
+// ------------------------------
 
-    if (link === "Explore") {
-      if (location.pathname !== "/") {
-        navigate("/");
+if (link === "Explore") {
+  if (location.pathname !== "/") {
+    navigate("/explore");
+  } else {
+    scrollToSection("explore");
+  }
 
-        setTimeout(() => {
-          scrollToSection("explore");
-        }, 100);
-      } else {
-        scrollToSection("explore");
-      }
-
-      return;
-    }
-
+  return;
+}
     // ------------------------------
     // ABOUT
     // ------------------------------
