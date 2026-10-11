@@ -43,8 +43,33 @@ function CourseDetails() {
   const [sessionId, setSessionId] = useState(null);
   const [isLearning, setIsLearning] = useState(false);
   const [sessionTime, setSessionTime] = useState(0);
+const activeSessionRef = useRef(null);
+const inactivityTimer = useRef(null);
+useEffect(() => {
+  activeSessionRef.current = sessionId;
+}, [sessionId]);
 
-  const inactivityTimer = useRef(null);
+useEffect(() => {
+  const handlePageHide = () => {
+    const activeId = activeSessionRef.current;
+
+    if (!activeId) return;
+
+    const payload = new URLSearchParams();
+    payload.set("session_id", String(activeId));
+
+    navigator.sendBeacon(
+      `${API}/stop_session.php`,
+      payload
+    );
+  };
+
+  window.addEventListener("pagehide", handlePageHide);
+
+  return () => {
+    window.removeEventListener("pagehide", handlePageHide);
+  };
+}, []);
 
   useEffect(() => {
     fetch(`${API}/courses.php`)
@@ -131,6 +156,90 @@ function CourseDetails() {
       });
   }, [courseId]);
 
+useEffect(() => {
+  if (!isLearning || !sessionId) return undefined;
+
+  let lastActivitySent = 0;
+  let stopped = false;
+
+  const sendActivity = () => {
+    if (stopped || document.visibilityState !== "visible") return;
+
+    const now = Date.now();
+
+    // Send an activity update at most every 30 seconds.
+    if (now - lastActivitySent < 30000) return;
+
+    lastActivitySent = now;
+
+    fetch(`${API}/update_activity.php`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        session_id: sessionId,
+      }),
+    }).catch((error) => {
+      console.error("Error updating learning activity:", error);
+    });
+  };
+
+  const resetInactivityTimer = () => {
+    if (document.visibilityState !== "visible") return;
+
+    clearTimeout(inactivityTimer.current);
+
+    sendActivity();
+
+    inactivityTimer.current = window.setTimeout(() => {
+      stopLearning(true);
+    }, 5 * 60 * 1000);
+  };
+
+  const events = [
+    "mousemove",
+    "keydown",
+    "scroll",
+    "touchstart",
+    "click",
+  ];
+
+  events.forEach((event) => {
+    window.addEventListener(event, resetInactivityTimer);
+  });
+
+  const handleVisibilityChange = () => {
+    if (document.visibilityState === "visible") {
+      resetInactivityTimer();
+    } else {
+      clearTimeout(inactivityTimer.current);
+    }
+  };
+
+  document.addEventListener("visibilitychange", handleVisibilityChange);
+
+  // Start the timer when this effect begins.
+  resetInactivityTimer();
+
+  return () => {
+    stopped = true;
+    clearTimeout(inactivityTimer.current);
+
+    events.forEach((event) => {
+      window.removeEventListener(event, resetInactivityTimer);
+    });
+
+    document.removeEventListener(
+      "visibilitychange",
+      handleVisibilityChange
+    );
+  };
+}, [isLearning, sessionId]);
+
+
+    
+  // Update the displayed learning timer
   useEffect(() => {
     if (!isLearning) return undefined;
 
@@ -140,6 +249,8 @@ function CourseDetails() {
 
     return () => window.clearInterval(timer);
   }, [isLearning]);
+
+
 
   useEffect(() => {
     if (!isLearning) return undefined;
@@ -191,10 +302,10 @@ function CourseDetails() {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        user_id: user.id,
-        course_id: courseId,
-      }),
+     body: JSON.stringify({
+  user_id: user.id,
+  course_id: Number(courseId),
+}),
     })
       .then((response) => response.json())
       .then((data) => {
